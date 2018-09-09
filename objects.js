@@ -20,7 +20,6 @@ class Blocky {
 		this.falling = false;
 
 		if (prevHealth) {
-
 			this.health = prevHealth;
 		} else {
 			this.health = 100;
@@ -42,8 +41,6 @@ class Blocky {
 
 		this.eyeXOff = 0;
 		this.eyeYOff = 0;
-
-
 	}
 
 	applyForce(force) {
@@ -63,7 +60,6 @@ class Blocky {
 	}
 
 	death() {
-
 		this.lives--;
 
 		if (this.lives <= 0) {
@@ -84,7 +80,6 @@ class Blocky {
 
 			this.opacity = 255;
 		}
-
 	}
 
 	win() {
@@ -134,7 +129,6 @@ class Blocky {
 
 		if (this.vel.y != 0) {
 			this.jumping = true;
-
 		} else {
 			this.jumping = false;
 		}
@@ -159,22 +153,16 @@ class Blocky {
 			}
 		}
 
-
 		this.topLimit = undefined;
 		this.onTop = [];
 
-		for (let platform of platforms) {
+		for (const platform of platforms) {
 			if (this.pos.x + this.w > platform.x && this.pos.x < platform.x + platform.w) {
 				if (this.pos.y + this.w <= platform.y) {
-
 					this.onTop.push(platform);
-
 				} else if (this.pos.y >= platform.y + platform.h) {
-
 					this.topLimit = platform.y + platform.h;
-
 				} else {
-
 					if (this.pos.x < platform.x) {
 						this.pos.x = platform.x - this.w;
 					} else {
@@ -184,39 +172,41 @@ class Blocky {
 			}
 		}
 
-
 		this.bottomLimit = (currLevelLayout.length + 8) * unit;
 
-		for (let platform of this.onTop) {
+		for (const platform of this.onTop) {
 			if (platform.y < this.bottomLimit) {
 				this.bottomLimit = platform.y;
 			}
 		}
 		this.dying = false;
-		for (let spike of spikes) {
+		for (const spike of spikes) {
 			if (this.pos.x + this.w > spike.x && this.pos.x < spike.x + spike.w) {
-
-				if (this.pos.y + this.w >= spike.y + spike.w * 2 / 3 && this.pos.y <= spike.y + spike.w) {
+				if (
+					this.pos.y + this.w >= spike.y + (spike.w * 2) / 3 &&
+					this.pos.y <= spike.y + spike.w
+				) {
 					this.dying = true;
 				}
 			}
 		}
 
-		for (let trampoline of trampolines) {
+		for (const trampoline of trampolines) {
 			if (this.pos.x + this.w > trampoline.x && this.pos.x < trampoline.x + trampoline.w) {
-				if (this.pos.y + this.w > trampoline.y + trampoline.w * 2 / 3 && this.pos.y < trampoline.y + trampoline.w) {
+				if (
+					this.pos.y + this.w > trampoline.y + (trampoline.w * 2) / 3 &&
+					this.pos.y < trampoline.y + trampoline.w
+				) {
 					this.superJump();
 				}
-			};
+			}
 		}
-
-
 
 		if (this.pos.x + this.w > endPortal.x && this.pos.x < endPortal.x + endPortal.w) {
 			if (this.pos.y + this.w > endPortal.y && this.pos.y < endPortal.y + endPortal.w) {
 				this.win();
 			}
-		};
+		}
 
 		if (this.dying) {
 			this.health -= 1;
@@ -225,20 +215,21 @@ class Blocky {
 			this.death();
 		}
 
-
 		if (this.pos.y >= (currLevelLayout.length + 7) * unit) {
 			this.death();
 		}
 
-		if (this.pos.y >= (currLevelLayout.length) * unit) {
+		if (this.pos.y >= currLevelLayout.length * unit) {
 			this.falling = true;
 		}
 
 		if (!this.hasWon) {
-
-			this.pos.x = constrain(this.pos.x, 0, (currLevelLayout[currLevelLayout.length - 1].length - 1) * unit);
+			this.pos.x = constrain(
+				this.pos.x,
+				0,
+				(currLevelLayout[currLevelLayout.length - 1].length - 1) * unit
+			);
 		}
-
 	}
 
 	render() {
@@ -257,12 +248,26 @@ class Blocky {
 		rect(this.pos.x, this.pos.y, this.w, this.w, borderRadius);
 		fill(255, this.opacity);
 		ellipse(this.pos.x + this.w / 3, this.pos.y + this.w / 3, 12);
-		ellipse(this.pos.x + this.w * 2 / 3, this.pos.y + this.w / 3, 12);
+		ellipse(this.pos.x + (this.w * 2) / 3, this.pos.y + this.w / 3, 12);
 
 		if (!this.dying && !this.falling) {
-			arc(this.pos.x + this.w / 2, this.pos.y + this.w * 2 / 3 - 5, this.w / 2 + 8, this.w / 3 + 5, 0, PI);
+			arc(
+				this.pos.x + this.w / 2,
+				this.pos.y + (this.w * 2) / 3 - 5,
+				this.w / 2 + 8,
+				this.w / 3 + 5,
+				0,
+				PI
+			);
 		} else {
-			arc(this.pos.x + this.w / 2, this.pos.y + this.w * 2 / 3 + 8, this.w / 2 + 8, this.w / 3 + 5, PI, 0);
+			arc(
+				this.pos.x + this.w / 2,
+				this.pos.y + (this.w * 2) / 3 + 8,
+				this.w / 2 + 8,
+				this.w / 3 + 5,
+				PI,
+				0
+			);
 		}
 
 		fill(0, this.opacity);
@@ -272,7 +277,6 @@ class Blocky {
 			this.eyeXOff = lerp(this.eyeXOff, -2, 0.2);
 		} else {
 			this.eyeXOff = lerp(this.eyeXOff, 0, 0.2);
-
 		}
 
 		if (this.vel.y < 0) {
@@ -284,7 +288,11 @@ class Blocky {
 		}
 
 		ellipse(this.pos.x + this.w / 3 + this.eyeXOff, this.pos.y + this.w / 3 + this.eyeYOff, 5);
-		ellipse(this.pos.x + this.w * 2 / 3 + this.eyeXOff, this.pos.y + this.w / 3 + this.eyeYOff, 5);
+		ellipse(
+			this.pos.x + (this.w * 2) / 3 + this.eyeXOff,
+			this.pos.y + this.w / 3 + this.eyeYOff,
+			5
+		);
 
 		textSize(32);
 
@@ -301,9 +309,6 @@ class Blocky {
 			fill(lerpColor(color(255), this.dyingColor, (this.health % 33) / 33));
 		}
 		text(`Lives: ${round(this.lives)}`, width - 130 - XtranslateAmt, 45 - YtranslateAmt);
-
-
-
 	}
 }
 
@@ -315,7 +320,6 @@ class Platform {
 		this.h = unit;
 		this.col = this.y / unit;
 		this.row = this.x / unit;
-
 	}
 
 	render() {
@@ -325,7 +329,6 @@ class Platform {
 	}
 }
 
-
 class Spikes {
 	constructor(x, y) {
 		this.x = x;
@@ -334,16 +337,35 @@ class Spikes {
 		this.renderedWidth = this.w + 0.5;
 		this.col = this.y / unit;
 		this.row = this.x / unit;
-
 	}
 
 	render() {
 		fill(250, 25, 50);
 		noStroke();
-		triangle(this.x, this.y + this.renderedWidth, this.x + this.renderedWidth / 3, this.y + this.renderedWidth, this.x + this.renderedWidth / 6, this.y + this.renderedWidth * 2 / 3);
-		triangle(this.x + this.renderedWidth / 3, this.y + this.renderedWidth, this.x + this.renderedWidth * 2 / 3, this.y + this.renderedWidth, this.x + this.renderedWidth / 2, this.y + this.renderedWidth * 2 / 3);
-		triangle(this.x + this.renderedWidth * 2 / 3, this.y + this.renderedWidth, this.x + this.renderedWidth, this.y + this.renderedWidth, this.x + this.renderedWidth * 5 / 6, this.y + this.renderedWidth * 2 / 3);
-
+		triangle(
+			this.x,
+			this.y + this.renderedWidth,
+			this.x + this.renderedWidth / 3,
+			this.y + this.renderedWidth,
+			this.x + this.renderedWidth / 6,
+			this.y + (this.renderedWidth * 2) / 3
+		);
+		triangle(
+			this.x + this.renderedWidth / 3,
+			this.y + this.renderedWidth,
+			this.x + (this.renderedWidth * 2) / 3,
+			this.y + this.renderedWidth,
+			this.x + this.renderedWidth / 2,
+			this.y + (this.renderedWidth * 2) / 3
+		);
+		triangle(
+			this.x + (this.renderedWidth * 2) / 3,
+			this.y + this.renderedWidth,
+			this.x + this.renderedWidth,
+			this.y + this.renderedWidth,
+			this.x + (this.renderedWidth * 5) / 6,
+			this.y + (this.renderedWidth * 2) / 3
+		);
 	}
 }
 
@@ -355,14 +377,12 @@ class Trampoline {
 		this.renderedWidth = this.w + 1;
 		this.col = this.y / unit;
 		this.row = this.x / unit;
-
 	}
 
 	render() {
 		fill(200, 50, 150);
 		noStroke();
-		rect(this.x, this.y + this.w * 2 / 3, this.renderedWidth, this.renderedWidth / 3);
-
+		rect(this.x, this.y + (this.w * 2) / 3, this.renderedWidth, this.renderedWidth / 3);
 	}
 }
 
@@ -378,14 +398,12 @@ class EndPortal {
 		this.opacity = this.opacityBase;
 		this.color = color(0, 255, 0, this.opacity);
 		this.count = 0;
-
 	}
 
 	render() {
 		this.count += 0.1;
 		if (!blocky.hasWon) {
 			this.opacity = this.opacityBase + sin(this.count) * 50;
-
 		} else {
 			if (this.opacity >= 20) {
 				this.opacity = this.opacityBase + sin(this.count) * 50;
@@ -393,7 +411,6 @@ class EndPortal {
 			} else {
 				this.opacity = 0;
 			}
-
 		}
 
 		this.color = color(0, 255, 0, this.opacity);
@@ -401,13 +418,33 @@ class EndPortal {
 		fill(this.color);
 		noStroke();
 		rect(this.x, this.y, this.w, this.h, borderRadius);
-		fill(this.color.levels[0], this.color.levels[1] - 75, this.color.levels[2], this.color.levels[3])
-		ellipse(this.x + this.w / 2, this.y + this.w / 2, this.w * 5 / 6);
-		fill(this.color.levels[0], this.color.levels[1] - 100, this.color.levels[2], this.color.levels[3])
-		ellipse(this.x + this.w / 2, this.y + this.w / 2, this.w * 2 / 3);
-		fill(this.color.levels[0], this.color.levels[1] - 125, this.color.levels[2], this.color.levels[3])
+		fill(
+			this.color.levels[0],
+			this.color.levels[1] - 75,
+			this.color.levels[2],
+			this.color.levels[3]
+		);
+		ellipse(this.x + this.w / 2, this.y + this.w / 2, (this.w * 5) / 6);
+		fill(
+			this.color.levels[0],
+			this.color.levels[1] - 100,
+			this.color.levels[2],
+			this.color.levels[3]
+		);
+		ellipse(this.x + this.w / 2, this.y + this.w / 2, (this.w * 2) / 3);
+		fill(
+			this.color.levels[0],
+			this.color.levels[1] - 125,
+			this.color.levels[2],
+			this.color.levels[3]
+		);
 		ellipse(this.x + this.w / 2, this.y + this.w / 2, this.w / 2);
-		fill(this.color.levels[0], this.color.levels[1] - 150, this.color.levels[2], this.color.levels[3])
+		fill(
+			this.color.levels[0],
+			this.color.levels[1] - 150,
+			this.color.levels[2],
+			this.color.levels[3]
+		);
 		ellipse(this.x + this.w / 2, this.y + this.w / 2, this.w / 3);
 	}
 }
@@ -428,17 +465,20 @@ class Button {
 	}
 
 	update() {
-		if (mouseX >= this.x && mouseX <= this.x + this.w && mouseY >= this.y && mouseY <= this.y + this.h) {
+		if (
+			mouseX >= this.x &&
+			mouseX <= this.x + this.w &&
+			mouseY >= this.y &&
+			mouseY <= this.y + this.h
+		) {
 			this.currColor = lerpColor(this.currColor, this.hoverColor, 0.1);
 
 			if (mouseIsPressed) {
 				this.clickFunc();
 			}
-
 		} else {
 			this.currColor = lerpColor(this.currColor, this.regColor, 0.1);
 		}
-
 	}
 
 	render() {
@@ -467,7 +507,6 @@ class BackgroundBlocky {
 		this.lift = createVector(0, -20);
 
 		this.jumping = false;
-
 	}
 
 	applyForce(force) {
@@ -479,7 +518,6 @@ class BackgroundBlocky {
 	}
 
 	update() {
-
 		this.applyForce(this.rightforce);
 
 		this.vel.add(this.acc);
@@ -499,7 +537,6 @@ class BackgroundBlocky {
 
 		if (this.vel.y != 0) {
 			this.jumping = true;
-
 		} else {
 			this.jumping = false;
 		}
@@ -508,24 +545,28 @@ class BackgroundBlocky {
 			this.jump();
 			this.jumping = true;
 		}
-
 	}
 
 	render() {
-
 		fill(this.currColor);
 		noStroke();
 		rect(this.pos.x, this.pos.y, this.w, this.w, borderRadius);
 		fill(255, this.opacity);
 		ellipse(this.pos.x + this.w / 3, this.pos.y + this.w / 3, 12);
-		ellipse(this.pos.x + this.w * 2 / 3, this.pos.y + this.w / 3, 12);
+		ellipse(this.pos.x + (this.w * 2) / 3, this.pos.y + this.w / 3, 12);
 
-
-		arc(this.pos.x + this.w / 2, this.pos.y + this.w * 2 / 3 - 5, this.w / 2 + 8, this.w / 3 + 5, 0, PI);
+		arc(
+			this.pos.x + this.w / 2,
+			this.pos.y + (this.w * 2) / 3 - 5,
+			this.w / 2 + 8,
+			this.w / 3 + 5,
+			0,
+			PI
+		);
 
 		fill(0, this.opacity);
 
 		ellipse(this.pos.x + this.w / 3 + 2, this.pos.y + this.w / 3, 5);
-		ellipse(this.pos.x + this.w * 2 / 3 + 2, this.pos.y + this.w / 3, 5);
+		ellipse(this.pos.x + (this.w * 2) / 3 + 2, this.pos.y + this.w / 3, 5);
 	}
 }
