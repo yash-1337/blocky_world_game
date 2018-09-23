@@ -1,9 +1,12 @@
 class Blocky {
 	constructor(x, y, prevHealth, numLives) {
+		/* global unit */
 		this.w = unit;
 		this.pos = createVector(x, y);
 		this.vel = createVector();
 		this.acc = createVector();
+
+		/* global speed */
 		this.speed = speed;
 		this.rightforce = createVector(this.speed, 0);
 		this.leftforce = createVector(-this.speed, 0);
@@ -63,8 +66,10 @@ class Blocky {
 		this.lives--;
 
 		if (this.lives <= 0) {
+			/* global state */
 			state = 'over';
 		} else {
+			/* global blockyInitialPos */
 			this.pos = createVector(blockyInitialPos[0], blockyInitialPos[1]);
 
 			this.vel.set(0, 0);
@@ -84,6 +89,8 @@ class Blocky {
 
 	win() {
 		this.hasWon = true;
+
+		/* global endPortal */
 		this.pos.x = lerp(this.pos.x, endPortal.x, 0.2);
 		this.pos.y = lerp(this.pos.y, endPortal.y, 0.2);
 		if (!this.TimeoutFinished) {
@@ -102,11 +109,17 @@ class Blocky {
 		this.winColor = color(100, 150, 250, this.opacity);
 
 		if (endPortal.opacity <= 0) {
+			/* global currentLevel */
 			currentLevel++;
+
+			/* global levels */
 			if (currentLevel > levels.length) {
 				state = 'win';
 			} else {
+				/* global currLevelLayout */
 				currLevelLayout = levels[currentLevel - 1];
+
+				/* global resetLayout */
 				resetLayout();
 			}
 		}
@@ -156,6 +169,7 @@ class Blocky {
 		this.topLimit = undefined;
 		this.onTop = [];
 
+		/* global platforms */
 		for (const platform of platforms) {
 			if (this.pos.x + this.w > platform.x && this.pos.x < platform.x + platform.w) {
 				if (this.pos.y + this.w <= platform.y) {
@@ -180,6 +194,8 @@ class Blocky {
 			}
 		}
 		this.dying = false;
+
+		/* global spikes */
 		for (const spike of spikes) {
 			if (this.pos.x + this.w > spike.x && this.pos.x < spike.x + spike.w) {
 				if (
@@ -191,6 +207,7 @@ class Blocky {
 			}
 		}
 
+		/* global trampolines */
 		for (const trampoline of trampolines) {
 			if (this.pos.x + this.w > trampoline.x && this.pos.x < trampoline.x + trampoline.w) {
 				if (
@@ -245,6 +262,8 @@ class Blocky {
 
 		fill(this.currColor);
 		noStroke();
+
+		/* global borderRadius */
 		rect(this.pos.x, this.pos.y, this.w, this.w, borderRadius);
 		fill(255, this.opacity);
 		ellipse(this.pos.x + this.w / 3, this.pos.y + this.w / 3, 12);
@@ -301,6 +320,9 @@ class Blocky {
 		} else {
 			fill(lerpColor(color(255), this.dyingColor, (this.health % 33) / 33));
 		}
+
+		/* global XtranslateAmt */
+		/* global YtranslateAmt */
 		text(`Health: ${round(this.health)}`, 20 - XtranslateAmt, 45 - YtranslateAmt);
 
 		if (!this.falling) {
@@ -402,6 +424,8 @@ class EndPortal {
 
 	render() {
 		this.count += 0.1;
+
+		/* global blocky */
 		if (!blocky.hasWon) {
 			this.opacity = this.opacityBase + sin(this.count) * 50;
 		} else {

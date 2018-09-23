@@ -84,6 +84,7 @@ function setup() {
 
 	resetLayout();
 
+	/* global Button */
 	playButton = new Button(
 		200,
 		height / 2,
@@ -139,6 +140,8 @@ function setup() {
 			resetLayout();
 		}
 	);
+
+	/* global BackgroundBlocky */
 	backgroundBlocky = new BackgroundBlocky();
 }
 
@@ -179,18 +182,23 @@ function resetLayout() {
 				if (blocky) {
 					const prevHealth = blocky.health;
 					const numLives = blocky.lives;
-					console.log(numLives);
+
+					/* global Blocky */
 					blocky = new Blocky(j * unit, i * unit, prevHealth, numLives);
 				} else {
 					blocky = new Blocky(j * unit, i * unit);
 				}
 			} else if (currBlock === 'P') {
+				/* global Platform */
 				platforms.push(new Platform(j * unit, i * unit));
 			} else if (currBlock === 'S') {
+				/* global Spikes */
 				spikes.push(new Spikes(j * unit, i * unit));
 			} else if (currBlock === 'E') {
+				/* global EndPortal */
 				endPortal = new EndPortal(j * unit, i * unit);
 			} else if (currBlock === 'T') {
+				/* global Trampoline */
 				trampolines.push(new Trampoline(j * unit, i * unit));
 			}
 		}

@@ -1,0 +1,65 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": false,
+		"jquery": false
+	},
+	"extends": [
+		"eslint:recommended",
+		"p5js",
+		"p5js/dom",
+		"p5js/sound",
+		"prettier",
+		"prettier/react"
+	],
+	"parserOptions": {
+		"ecmaVersion": 8
+	},
+	"rules": {
+		"no-alert": "warn",
+		"no-console": "warn",
+		"no-debugger": "warn",
+		"indent": [
+			"error",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
+		"quotes": [
+			"error",
+			"single",
+			{
+				"avoidEscape": true
+			}
+		],
+		"semi": ["error", "always"],
+		"prefer-const": [
+			"warn",
+			{
+				"destructuring": "all",
+				"ignoreReadBeforeAssign": true
+			}
+		],
+		"arrow-body-style": ["error", "as-needed"],
+		"no-return-assign": 0,
+		"no-use-before-define": [
+			"error",
+			{ "functions": false, "classes": false, "variables": true }
+		],
+		"no-unused-vars": ["error", { "vars": "local" }],
+		"prettier/prettier": [
+			"warn",
+			{
+				"useTabs": true,
+				"tabWidth": 4,
+				"singleQuote": true,
+				"printWidth": 100
+			}
+		],
+		"no-var": "error",
+		"no-global-assign": 0
+	},
+	"plugins": ["prettier"]
+}
